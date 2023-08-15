@@ -42,7 +42,6 @@ io.on("connection", (socket) => {
 
   socket.on("join chat", (room) => {
     socket.join(room);
-    console.log("user joined room " + room);
   });
 
   socket.on("typing", (room) => socket.in(room).emit("typing"));
@@ -59,8 +58,7 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.off("setup" , () => {
-    console.log("User disconnected");
-    socket.leave(userData._id)
-  })
+  socket.off("setup", () => {
+    socket.leave(userData._id);
+  });
 });
