@@ -6,13 +6,13 @@ export const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, pic } = req.body;
   if (!name || !email || !password) {
     res.status(400);
-    throw new Error("Please enter all the fields ");
+    throw new Error("Please enter all the fields");
   }
 
   const existUser = await User.findOne({ email });
   if (existUser) {
     res.status(400);
-    throw new Error("user already exists");
+    throw new Error("User already exists");
   }
 
   const user = await User.create({
@@ -22,15 +22,13 @@ export const registerUser = asyncHandler(async (req, res) => {
     pic: pic,
   });
   if (user) {
-    res
-      .status(201)
-      .json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        pic: user.pic,
-        token: generateToken(user._id),
-      });
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      pic: user.pic,
+      token: generateToken(user._id),
+    });
   } else {
     res.status(400);
     throw new Error("User not found");
@@ -47,18 +45,17 @@ export const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
-    res
-      .status(201)
-      .json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        pic: user.pic,
-        token: generateToken(user._id),
-      });
+    res.status(201).json({
+      success: true,
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      pic: user.pic,
+      token: generateToken(user._id),
+    });
   } else {
     res.status(400);
-    throw Error("Invalid Email or Password");
+    throw new Error("Invalid Email or Password");
   }
 });
 
