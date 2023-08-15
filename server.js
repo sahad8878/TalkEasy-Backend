@@ -11,7 +11,14 @@ import { errorHandler, notFound } from "./middlewares/errorMiddlwares.js";
 const app = express();
 app.use(express.json());
 
-app.use(cors({}));
+// app.use(cors({}));
+const corsOptions = {
+  origin: 'https://talkeasy.netlify.app', // Replace with your frontend URL
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // You might need this if you're sending cookies
+};
+
+app.use(cors(corsOptions));
 
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
@@ -28,7 +35,8 @@ import { Server } from "socket.io";
 const io = new Server(server, {
   pingTimeout: 60000,
   cors: {
-    origin:"https://talkeasy.netlify.app/",
+    origin: 'https://talkeasy.netlify.app', // Same as the frontend URL
+    methods: ['GET', 'POST'],
   },
 });
 
